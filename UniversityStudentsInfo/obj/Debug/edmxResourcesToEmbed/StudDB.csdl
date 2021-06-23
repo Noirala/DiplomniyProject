@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="StudentsInfoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="StudentInfo">
+    <Key>
+      <PropertyRef Name="StudentID" />
+    </Key>
+    <Property Name="StudentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Patronymic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="DateOfEnrollment" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Group" Type="String" Nullable="false" />
+    <Property Name="Course" Type="Int32" Nullable="false" />
+    <Property Name="AttestatScanNumber" Type="Int32" Nullable="false" />
+    <Property Name="PassportNumber" Type="String" MaxLength="11" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Registration" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Telephone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Courses" Relationship="StudentsInfoModel.FK_StudentInfo_Courses" FromRole="StudentInfo" ToRole="Courses" />
+    <NavigationProperty Name="Groups" Relationship="StudentsInfoModel.FK_StudentInfo_Groups" FromRole="StudentInfo" ToRole="Groups" />
+  </EntityType>
+  <EntityContainer Name="StudentsInfoEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="StudentInfo" EntityType="Self.StudentInfo" />
+    <EntitySet Name="Courses" EntityType="StudentsInfoModel.Courses" />
+    <EntitySet Name="Groups" EntityType="StudentsInfoModel.Groups" />
+    <AssociationSet Name="FK_StudentInfo_Courses" Association="StudentsInfoModel.FK_StudentInfo_Courses">
+      <End Role="Courses" EntitySet="Courses" />
+      <End Role="StudentInfo" EntitySet="StudentInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_StudentInfo_Groups" Association="StudentsInfoModel.FK_StudentInfo_Groups">
+      <End Role="Groups" EntitySet="Groups" />
+      <End Role="StudentInfo" EntitySet="StudentInfo" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Courses">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="StudentInfo" Relationship="StudentsInfoModel.FK_StudentInfo_Courses" FromRole="Courses" ToRole="StudentInfo" />
+  </EntityType>
+  <EntityType Name="Groups">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="String" Nullable="false" />
+    <NavigationProperty Name="StudentInfo" Relationship="StudentsInfoModel.FK_StudentInfo_Groups" FromRole="Groups" ToRole="StudentInfo" />
+    <Property Name="GroupName" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <Association Name="FK_StudentInfo_Courses">
+    <End Type="StudentsInfoModel.Courses" Role="Courses" Multiplicity="1" />
+    <End Type="StudentsInfoModel.StudentInfo" Role="StudentInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Courses">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="StudentInfo">
+        <PropertyRef Name="Course" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_StudentInfo_Groups">
+    <End Type="StudentsInfoModel.Groups" Role="Groups" Multiplicity="1" />
+    <End Type="StudentsInfoModel.StudentInfo" Role="StudentInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Groups">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="StudentInfo">
+        <PropertyRef Name="Group" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
